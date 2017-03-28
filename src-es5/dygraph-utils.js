@@ -1052,6 +1052,7 @@ var pixelSafeOptions = {
   'showRoller': true,
   'strokeWidth': true,
   'underlayCallback': true,
+  'overlayCallback': true,
   'unhighlightCallback': true,
   'zoomCallback': true
 };

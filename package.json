@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/danvk/dygraphs.git"
+    "url": "git://github.com/mleprince/dygraphs.git"
   },
   "keywords": [
     "dygraphs",

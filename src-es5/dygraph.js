@@ -1209,9 +1209,9 @@ Dygraph.prototype.createDragInterface_ = function () {
       if (event.preventDefault) {
         event.preventDefault(); // Firefox, Chrome, etc.
       } else {
-          event.returnValue = false; // IE
-          event.cancelBubble = true;
-        }
+        event.returnValue = false; // IE
+        event.cancelBubble = true;
+      }
 
       var canvasPos = utils.findPos(g.canvas_);
       contextB.px = canvasPos.x;
@@ -1463,9 +1463,9 @@ Dygraph.prototype.resetZoom = function () {
   }
 
   var oldWindow = null,
-      newWindow = null,
-      oldValueRanges = null,
-      newValueRanges = null;
+    newWindow = null,
+    oldValueRanges = null,
+    newValueRanges = null;
   if (dirtyX) {
     oldWindow = this.xAxisRange();
     newWindow = [minDate, maxDate];
@@ -2023,7 +2023,7 @@ Dygraph.prototype.addXTicks_ = function () {
 
   var xAxisOptionsView = this.optionsViewForAxis_('x');
   var xTicks = xAxisOptionsView('ticker')(range[0], range[1], this.plotter_.area.w, // TODO(danvk): should be area.width
-  xAxisOptionsView, this);
+    xAxisOptionsView, this);
   // var msg = 'ticker(' + range[0] + ', ' + range[1] + ', ' + this.width_ + ', ' + this.attr_('pixelsPerXLabel') + ') -> ' + JSON.stringify(xTicks);
   // console.log(msg);
   this.layout_.setXTicks(xTicks);
@@ -2403,6 +2403,13 @@ Dygraph.prototype.renderGraph_ = function (is_initial_draw) {
     underlayCallback.call(this, this.hidden_ctx_, this.layout_.getPlotArea(), this, this);
   }
 
+  var overlayCallback = this.getFunctionOption('overlayCallback');
+  if (overlayCallback) {
+    // NOTE: we pass the dygraph object to this callback twice to avoid breaking
+    // users who expect a deprecated form of this callback.
+    overlayCallback.call(this, this.hidden_ctx_, this.layout_.getPlotArea(), this, this);
+  }
+
   var e = {
     canvas: this.hidden_,
     drawingContext: this.hidden_ctx_
@@ -2582,7 +2589,7 @@ Dygraph.prototype.computeYAxisRanges_ = function (extremes) {
       }
 
       var maxAxisY = maxY,
-          minAxisY = minY;
+        minAxisY = minY;
       if (ypadCompat) {
         if (logscale) {
           maxAxisY = maxY + ypad * span;
@@ -3116,7 +3123,7 @@ Dygraph.prototype.start_ = function () {
       req.onreadystatechange = function () {
         if (req.readyState == 4) {
           if (req.status === 200 || // Normal http
-          req.status === 0) {
+            req.status === 0) {
             // Chrome w/ --allow-file-access-from-files
             caller.loadedEvent_(req.responseText);
           }
@@ -3399,7 +3406,7 @@ Dygraph.prototype.indexFromSetName = function (name) {
  */
 Dygraph.prototype.getRowForX = function (xVal) {
   var low = 0,
-      high = this.numRows() - 1;
+    high = this.numRows() - 1;
 
   while (low <= high) {
     var idx = high + low >> 1;
