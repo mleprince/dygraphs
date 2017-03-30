@@ -21,20 +21,20 @@ Current bits of jankiness:
  *
  * @constructor
  */
-var grid = function() {
+var grid = function () {
 };
 
-grid.prototype.toString = function() {
+grid.prototype.toString = function () {
   return "Gridline Plugin";
 };
 
-grid.prototype.activate = function(g) {
+grid.prototype.activate = function (g) {
   return {
     willDrawChart: this.willDrawChart
   };
 };
 
-grid.prototype.willDrawChart = function(e) {
+grid.prototype.willDrawChart = function (e) {
   // Draw the new X/Y grid. Lines appear crisper when pixels are rounded to
   // half-integers. This prevents them from drawing in two rows/cols.
   var g = e.dygraph;
@@ -42,8 +42,8 @@ grid.prototype.willDrawChart = function(e) {
   var layout = g.layout_;
   var area = e.dygraph.plotter_.area;
 
-  function halfUp(x)  { return Math.round(x) + 0.5; }
-  function halfDown(y){ return Math.round(y) - 0.5; }
+  function halfUp(x) { return Math.round(x) + 0.5; }
+  function halfDown(y) { return Math.round(y) - 0.5; }
 
   var x, y, i, ticks;
   if (g.getOptionForAxis('drawGrid', 'y')) {
@@ -110,10 +110,68 @@ grid.prototype.willDrawChart = function(e) {
       if (ctx.setLineDash) ctx.setLineDash([]);
     }
     ctx.restore();
+    if (g.getOptionForAxis('detailedGrid', 'x')) {
+
+      ctx.strokeStyle = 'rgb(200,200,200)';
+      // affichage de la grille detaillé
+      if (ticks.length > 1) {
+        var delta = (ticks[1][0] - ticks[0][0]) / 5
+
+
+        // 5 premiers
+        for (i = 1; i < 5; i++) {
+          x = halfUp(area.x + (ticks[0][0] - i * delta) * area.w);
+          y = halfDown(area.y + area.h);
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x, area.y);
+          ctx.closePath();
+          ctx.stroke();
+        }
+        // tous les suivants
+        for (i = 1; i < 5 * ticks.length; i++) {
+          if (i % 5 != 0) {
+            y = halfDown(area.y + area.h);
+            x = halfUp(area.x + (ticks[0][0] + i * delta) * area.w);
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, area.y);
+            ctx.closePath();
+            ctx.stroke();
+          }
+        }
+
+        if (delta * area.w / 5 > 4) {
+          ctx.setLineDash([2, 8]);
+          // 5 premiers
+          for (i = 1; i < 25; i++) {
+            x = halfUp(area.x + (ticks[0][0] - i * (delta / 5)) * area.w);
+            y = halfDown(area.y + area.h);
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, area.y);
+            ctx.closePath();
+            ctx.stroke();
+          }
+          // tous les suivants
+          for (i = 1; i < 5 * ticks.length * 25; i++) {
+            if (i % 5 != 0) {
+              y = halfDown(area.y + area.h);
+              x = halfUp(area.x + (ticks[0][0] + i * (delta / 5)) * area.w);
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              ctx.lineTo(x, area.y);
+              ctx.closePath();
+              ctx.stroke();
+            }
+          }
+        }
+
+      }
+    }
   }
 };
-
-grid.prototype.destroy = function() {
+grid.prototype.destroy = function () {
 };
 
 export default grid;
