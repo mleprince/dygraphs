@@ -176,7 +176,6 @@ grid.prototype.willDrawChart = function (e) {
               ctx.stroke();
             }
           }
-          ctx.setLineDash([1,0]);
         }
 
       }
