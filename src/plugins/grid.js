@@ -118,17 +118,15 @@ grid.prototype.willDrawChart = function (e) {
       // affichage de la grille detaillé
       if (ticks.length > 1) {
 
+        var delta = (ticks[1].pos - ticks[0].pos) / 5
 
 
-        var delta = (ticks[1][0] - ticks[0][0]) / 5
-
-
-
-        ctx.beginPath();
 
         /**
          * Affichage des barres horizontales
          */
+
+        ctx.beginPath();
 
         var it = 0
         var y;
@@ -146,29 +144,32 @@ grid.prototype.willDrawChart = function (e) {
 
         // 5 premiers
         for (i = 1; i < 5; i++) {
-          x = halfUp(area.x + (ticks[0][0] - i * delta) * area.w);
+          x = halfUp(area.x + (ticks[0].pos - i * delta) * area.w);
           y = halfDown(area.y + area.h);
 
           ctx.moveTo(x, y);
           ctx.lineTo(x, area.y);
-          ctx.stroke();
         }
         // tous les suivants
         for (i = 1; i < 5 * ticks.length; i++) {
           if (i % 5 != 0) {
             y = halfDown(area.y + area.h);
-            x = halfUp(area.x + (ticks[0][0] + i * delta) * area.w);
+            x = halfUp(area.x + (ticks[0].pos + i * delta) * area.w);
             ctx.moveTo(x, y);
             ctx.lineTo(x, area.y);
-            ctx.stroke();
           }
         }
 
+
+        ctx.closePath();
+        ctx.stroke();
+
         if (delta * area.w / 5 > 4) {
+          ctx.beginPath();
           ctx.setLineDash([2, 8]);
           // 5 premiers
           for (i = 1; i < 25; i++) {
-            x = halfUp(area.x + (ticks[0][0] - i * (delta / 5)) * area.w);
+            x = halfUp(area.x + (ticks[0].pos - i * (delta / 5)) * area.w);
             y = halfDown(area.y + area.h);
             ctx.moveTo(x, y);
             ctx.lineTo(x, area.y);
@@ -177,14 +178,14 @@ grid.prototype.willDrawChart = function (e) {
           for (i = 1; i < 5 * ticks.length * 25; i++) {
             if (i % 5 != 0) {
               y = halfDown(area.y + area.h);
-              x = halfUp(area.x + (ticks[0][0] + i * (delta / 5)) * area.w);
+              x = halfUp(area.x + (ticks[0].pos + i * (delta / 5)) * area.w);
               ctx.moveTo(x, y);
               ctx.lineTo(x, area.y);
-
             }
           }
           ctx.stroke();
           ctx.closePath();
+          ctx.setLineDash([]);
         }
 
       }
