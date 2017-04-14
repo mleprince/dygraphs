@@ -164,7 +164,7 @@ grid.prototype.willDrawChart = function (e) {
         ctx.closePath();
         ctx.stroke();
 
-        if (delta * area.w / 5 > 4) {
+        if ((delta * area.w / 5) > 4) {
           ctx.beginPath();
           ctx.setLineDash([2, 8]);
           // 5 premiers
