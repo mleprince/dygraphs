@@ -106,10 +106,10 @@ exporter.asCanvas = function (dygraph, userOptions) {
     utils.update(options, userOptions);
 
     canvas.width = dygraph.width_;
-    canvas.height = dygraph.height_ + options.legendHeight;
-
+ //   canvas.height = dygraph.height_ + options.legendHeight;
+    canvas.height = dygraph.height_ 
     this.drawPlot(canvas, dygraph, options);
-    this.drawLegend(canvas, dygraph, options);
+  //  this.drawLegend(canvas, dygraph, options);
 
     return canvas;
 };
