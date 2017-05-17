@@ -66,9 +66,13 @@ import GridPlugin from './plugins/grid';
 import LegendPlugin from './plugins/legend';
 import RangeSelectorPlugin from './plugins/range-selector';
 
+import exporter from './dygraph-export'
+
 import GVizChart from './dygraph-gviz';
 
 "use strict";
+
+
 
 /**
  * Creates an interactive, zoomable chart.
@@ -87,6 +91,7 @@ import GVizChart from './dygraph-gviz';
 var Dygraph = function(div, data, opts) {
   this.__init__(div, data, opts);
 };
+
 
 Dygraph.NAME = "Dygraph";
 Dygraph.VERSION = "2.0.0";
@@ -3479,5 +3484,7 @@ Dygraph.dateTicker = DygraphTickers.dateTicker;
 Dygraph.Granularity = DygraphTickers.Granularity;
 Dygraph.getDateAxis = DygraphTickers.getDateAxis;
 Dygraph.floatFormat = utils.floatFormat;
+
+Dygraph.export = exporter
 
 export default Dygraph;

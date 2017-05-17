@@ -142,6 +142,9 @@ var _dygraphGviz = require('./dygraph-gviz');
 
 var _dygraphGviz2 = _interopRequireDefault(_dygraphGviz);
 
+var _exporter = require('./dygraph-export');
+var _Exporter = _interopRequireDefault(_exporter);
+
 "use strict";
 
 /**
@@ -3522,6 +3525,8 @@ Dygraph.dateTicker = DygraphTickers.dateTicker;
 Dygraph.Granularity = DygraphTickers.Granularity;
 Dygraph.getDateAxis = DygraphTickers.getDateAxis;
 Dygraph.floatFormat = utils.floatFormat;
+
+Dygraph.export = _Exporter;
 
 exports['default'] = Dygraph;
 module.exports = exports['default'];

@@ -20,7 +20,6 @@
 /*global Dygraph:false */
 "use strict";
 
-import Dygraph from './dygraph';
 
 /**
  * A wrapper around Dygraph that implements the gviz API.
