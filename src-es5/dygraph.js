@@ -2406,13 +2406,6 @@ Dygraph.prototype.renderGraph_ = function (is_initial_draw) {
     underlayCallback.call(this, this.hidden_ctx_, this.layout_.getPlotArea(), this, this);
   }
 
-  var overlayCallback = this.getFunctionOption('overlayCallback');
-  if (overlayCallback) {
-    // NOTE: we pass the dygraph object to this callback twice to avoid breaking
-    // users who expect a deprecated form of this callback.
-    overlayCallback.call(this, this.hidden_ctx_, this.layout_.getPlotArea(), this, this);
-  }
-
   var e = {
     canvas: this.hidden_,
     drawingContext: this.hidden_ctx_
@@ -2437,6 +2430,14 @@ Dygraph.prototype.renderGraph_ = function (is_initial_draw) {
       fn(this);
     }
   }
+
+  var overlayCallback = this.getFunctionOption('overlayCallback');
+  if (overlayCallback) {
+    // NOTE: we pass the dygraph object to this callback twice to avoid breaking
+    // users who expect a deprecated form of this callback.
+    overlayCallback.call(this, this.hidden_ctx_, this.layout_.getPlotArea(), this, this);
+  }
+
 };
 
 /**
