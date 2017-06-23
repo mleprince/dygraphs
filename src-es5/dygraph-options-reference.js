@@ -234,6 +234,17 @@ if (typeof process !== 'undefined') {
           "parameters": [["context", "the canvas drawing context on which to draw"], ["area", "An object with {x,y,w,h} properties describing the drawing area."], ["dygraph", "the reference graph"]],
           "description": "When set, this callback gets called before the chart is drawn. It details on how to use this."
         },
+        "overlayCallback": {
+          "default": "null",
+          "labels": ["Callbacks"],
+          "type": "function(context, area, dygraph)",
+          "parameters": [
+            ["context", "the canvas drawing context on which to draw"],
+            ["area", "An object with {x,y,w,h} properties describing the drawing area."],
+            ["dygraph", "the reference graph"]
+          ],
+          "description": "When set, this callback gets called before the chart is drawn. It details on how to use this."
+        },
         "width": {
           "default": "480",
           "labels": ["Overall display"],

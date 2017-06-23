@@ -56,7 +56,7 @@ exports.numberValueFormatter = numberValueFormatter;
 exports.numberAxisLabelFormatter = numberAxisLabelFormatter;
 exports.dateAxisLabelFormatter = dateAxisLabelFormatter;
 exports.dateValueFormatter = dateValueFormatter;
-
+exports._interopRequireWildcard = _interopRequireWildcard;
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
 
 var _dygraphTickers = require('./dygraph-tickers');

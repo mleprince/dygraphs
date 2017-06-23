@@ -21,7 +21,7 @@
 var dygraph = require('./dygraph')
 
 var _dygraphUtils = require('./dygraph-utils');
-var utils = _interopRequireWildcard(_dygraphUtils);
+var utils = _dygraphUtils._interopRequireWildcard(_dygraphUtils);
 
 
 var exporter = {}
