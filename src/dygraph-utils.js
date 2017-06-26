@@ -1201,8 +1201,6 @@ export function dateAxisLabelFormatter(date, granularity, opts) {
   var utc = opts('labelsUTC');
   var timezone = opts('labelsWithTimeZone');
 
-  console.log(timezone)
-
   var accessors = DateAccessorsLocal;
 
   if (utc) {
