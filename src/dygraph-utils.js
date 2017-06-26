@@ -16,7 +16,8 @@
 
 import * as DygraphTickers from './dygraph-tickers';
 
-import * as moment from 'moment-timezone'
+import moment from 'moment'
+import 'moment-timezone';
 
 export var LOG_SCALE = 10;
 export var LN_TEN = Math.log(LOG_SCALE);

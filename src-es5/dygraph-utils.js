@@ -57,15 +57,19 @@ exports.numberAxisLabelFormatter = numberAxisLabelFormatter;
 exports.dateAxisLabelFormatter = dateAxisLabelFormatter;
 exports.dateValueFormatter = dateValueFormatter;
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 var _dygraphTickers = require('./dygraph-tickers');
 
 var DygraphTickers = _interopRequireWildcard(_dygraphTickers);
 
-var _momentTimezone = require('moment-timezone');
+var _moment = require('moment');
 
-var moment = _interopRequireWildcard(_momentTimezone);
+var _moment2 = _interopRequireDefault(_moment);
+
+require('moment-timezone');
 
 var LOG_SCALE = 10;
 exports.LOG_SCALE = LOG_SCALE;
@@ -1464,9 +1468,9 @@ function dateValueFormatter(d, opts) {
 
 function getMomentTZ(d, interpret, timezone) {
   if (interpret) {
-    return moment.tz(d, timezone); // if d is a javascript Date object, the resulting moment may have a *different* epoch than the input Date d.
+    return _moment2['default'].tz(d, timezone); // if d is a javascript Date object, the resulting moment may have a *different* epoch than the input Date d.
   } else {
-      return moment(d).tz(timezone); // does not change epoch value, just outputs same epoch value as different timezone
+      return (0, _moment2['default'])(d).tz(timezone); // does not change epoch value, just outputs same epoch value as different timezone
     }
 }
 
