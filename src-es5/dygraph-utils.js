@@ -1420,10 +1420,10 @@ function dateAxisLabelFormatter(date, granularity, opts) {
 
   if (utc) {
     accessors = DateAccessorsUTC;
-  } else if (timezone != null) {
+  }
+  if (timezone != null) {
     accessors = DateAccessorsWithTimezone(timezone);
   }
-  var accessors = utc ? DateAccessorsUTC : DateAccessorsLocal;
 
   var year = accessors.getFullYear(date),
       month = accessors.getMonth(date),
