@@ -490,6 +490,12 @@ if (typeof (process) !== 'undefined') {
           "type": "boolean",
           "description": "Show date/time labels according to UTC (instead of local time)."
         },
+        "labelsWithTimeZone": {
+          "default": "Europe/Paris",
+          "labels": ["Value display/formatting", "Axis display"],
+          "type": "string ",
+          "description": "Show date/time labels according to a Timezone (instead of local time)."
+        },
         "labelsKMB": {
           "default": "false",
           "labels": ["Value display/formatting"],

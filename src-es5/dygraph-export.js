@@ -18,23 +18,35 @@
  * See: http://cavorite.com/labs/js/dygraphs-export/
  */
 
-var dygraph = require('./dygraph')
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _dygraph = require('./dygraph');
+
+var _dygraph2 = _interopRequireDefault(_dygraph);
 
 var _dygraphUtils = require('./dygraph-utils');
-var utils = _dygraphUtils._interopRequireWildcard(_dygraphUtils);
 
+var utils = _interopRequireWildcard(_dygraphUtils);
 
-var exporter = {}
+var exporter = {};
 
 exporter.DEFAULT_ATTRS = {
 
     backgroundColor: "transparent",
 
-    //Texts displayed below the chart's x-axis and to the left of the y-axis 
+    //Texts displayed below the chart's x-axis and to the left of the y-axis
     titleFont: "bold 18px serif",
     titleFontColor: "black",
 
-    //Texts displayed below the chart's x-axis and to the left of the y-axis 
+    //Texts displayed below the chart's x-axis and to the left of the y-axis
     axisLabelFont: "bold 14px serif",
     axisLabelFontColor: "black",
 
@@ -49,15 +61,14 @@ exporter.DEFAULT_ATTRS = {
     // Default position for vertical labels
     vLabelLeft: 20,
 
-    legendHeight: 20,    // Height of the legend area
+    legendHeight: 20, // Height of the legend area
     legendMargin: 20,
     lineHeight: 30,
     maxlabelsWidth: 0,
     labelTopMargin: 35,
     magicNumbertop: 8
 
-}
-
+};
 
 /**
  * Tests whether the browser supports the canvas API and its methods for 
@@ -68,7 +79,7 @@ exporter.isSupported = function () {
     try {
         var canvas = document.createElement("canvas");
         var context = canvas.getContext("2d");
-        return (!!canvas.toDataURL && !!context.fillText);
+        return !!canvas.toDataURL && !!context.fillText;
     } catch (e) {
         // Silent exception.
     }
@@ -108,10 +119,10 @@ exporter.asCanvas = function (dygraph, userOptions) {
     utils.update(options, userOptions);
 
     canvas.width = dygraph.width_;
-   // canvas.height = dygraph.height_ + options.legendHeight;
+    //   canvas.height = dygraph.height_ + options.legendHeight;
     canvas.height = dygraph.height_;
     this.drawPlot(canvas, dygraph, options);
-  //  this.drawLegend(canvas, dygraph, options);
+    //  this.drawLegend(canvas, dygraph, options);
 
     return canvas;
 };
@@ -134,20 +145,17 @@ exporter.drawPlot = function (canvas, dygraph, options) {
 
     ctx.drawImage(plotCanvas, 0, 0);
 
-
     // Add the x and y axes
     var axesPluginDict = this.getPlugin(dygraph, 'Axes Plugin');
     if (axesPluginDict) {
         var axesPlugin = axesPluginDict.plugin;
 
         for (i = 0; i < axesPlugin.ylabels_.length; i++) {
-            this.putLabel(ctx, axesPlugin.ylabels_[i], options,
-                options.labelFont, options.labelFontColor);
+            this.putLabel(ctx, axesPlugin.ylabels_[i], options, options.labelFont, options.labelFontColor);
         }
 
         for (i = 0; i < axesPlugin.xlabels_.length; i++) {
-            this.putLabel(ctx, axesPlugin.xlabels_[i], options,
-                options.labelFont, options.labelFontColor);
+            this.putLabel(ctx, axesPlugin.xlabels_[i], options, options.labelFont, options.labelFontColor);
         }
     }
 
@@ -157,25 +165,18 @@ exporter.drawPlot = function (canvas, dygraph, options) {
     if (labelsPluginDict) {
         var labelsPlugin = labelsPluginDict.plugin;
 
-        this.putLabel(ctx, labelsPlugin.title_div_, options,
-            options.titleFont, options.titleFontColor);
+        this.putLabel(ctx, labelsPlugin.title_div_, options, options.titleFont, options.titleFontColor);
 
-        this.putLabel(ctx, labelsPlugin.xlabel_div_, options,
-            options.axisLabelFont, options.axisLabelFontColor);
+        this.putLabel(ctx, labelsPlugin.xlabel_div_, options, options.axisLabelFont, options.axisLabelFontColor);
 
-        this.putVerticalLabelY1(ctx, labelsPlugin.ylabel_div_, options,
-            options.axisLabelFont, options.axisLabelFontColor, "center");
+        this.putVerticalLabelY1(ctx, labelsPlugin.ylabel_div_, options, options.axisLabelFont, options.axisLabelFontColor, "center");
 
-       this.putVerticalLabelY2(ctx, labelsPlugin.y2label_div_, options,
-            options.axisLabelFont, options.axisLabelFontColor, "center");
+        this.putVerticalLabelY2(ctx, labelsPlugin.y2label_div_, options, options.axisLabelFont, options.axisLabelFontColor, "center");
     }
-
 
     for (i = 0; i < dygraph.layout_.annotations.length; i++) {
-        this.putLabelAnn(ctx, dygraph.layout_.annotations[i], options,
-            options.labelFont, options.labelColor);
+        this.putLabelAnn(ctx, dygraph.layout_.annotations[i], options, options.labelFont, options.labelColor);
     }
-
 };
 
 /**
@@ -199,7 +200,7 @@ exporter.putLabel = function (ctx, divLabel, options, font, color) {
         top = ctx.canvas.height - options.legendHeight - bottom - height;
     }
 
-    // FIXME: Remove this 'magic' number needed to get the line-height. 
+    // FIXME: Remove this 'magic' number needed to get the line-height.
     top = top + options.magicNumbertop;
 
     var width = parseInt(divLabel.style.width, 10);
@@ -229,10 +230,8 @@ exporter.putVerticalLabelY1 = function (ctx, divLabel, options, font, color, tex
     var left = parseInt(divLabel.style.left, 10) + parseInt(divLabel.style.width, 10) / 2;
     var text = divLabel.innerText || divLabel.textContent;
 
-
     // FIXME: The value of the 'left' property is frequently 0, used the option.
-    if (!left)
-        left = options.vLabelLeft;
+    if (!left) left = options.vLabelLeft;
 
     if (textAlign == "center") {
         var textDim = ctx.measureText(text);
@@ -324,7 +323,6 @@ exporter.drawLegend = function (canvas, dygraph, options) {
     var labelsX = Math.floor((canvas.width - labelsWidth) / 2);
     var labelsY = canvas.height - options.legendHeight + labelTopMargin;
 
-
     var labelVisibility = dygraph.attr_("visibility");
 
     ctx.font = options.legendFont;
@@ -335,11 +333,11 @@ exporter.drawLegend = function (canvas, dygraph, options) {
     for (i = 0; i < labels.length; i++) {
         if (labelVisibility[i]) {
             //TODO Replace the minus sign by a proper dash, although there is a
-            //     problem when the page encoding is different than the encoding 
+            //     problem when the page encoding is different than the encoding
             //     of this file (UTF-8).
             var txt = "- " + labels[i];
             ctx.fillStyle = colors[usedColorCount];
-            usedColorCount++
+            usedColorCount++;
             ctx.fillText(txt, labelsX, labelsY);
             labelsX = labelsX + ctx.measureText(txt).width + labelMargin;
         }
@@ -359,7 +357,7 @@ exporter.getPlugin = function (dygraph, name) {
         }
     }
     return null;
-}
+};
 
-
-export default exporter;
+exports['default'] = exporter;
+module.exports = exports['default'];

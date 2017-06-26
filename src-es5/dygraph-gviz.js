@@ -20,22 +20,15 @@
 /*global Dygraph:false */
 "use strict";
 
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _dygraph = require('./dygraph');
-
-var _dygraph2 = _interopRequireDefault(_dygraph);
-
 /**
  * A wrapper around Dygraph that implements the gviz API.
  * @param {!HTMLDivElement} container The DOM object the visualization should
  *     live in.
  * @constructor
  */
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 var GVizChart = function GVizChart(container) {
   this.container = container;
 };
@@ -53,7 +46,7 @@ GVizChart.prototype.draw = function (data, options) {
     this.date_graph.destroy();
   }
 
-  this.date_graph = new _dygraph2['default'](this.container, data, options);
+  this.date_graph = new Dygraph(this.container, data, options);
 };
 
 /**

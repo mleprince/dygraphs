@@ -14,7 +14,7 @@
 /*global Dygraph:false, Node:false */
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports.removeEvent = removeEvent;
@@ -56,12 +56,16 @@ exports.numberValueFormatter = numberValueFormatter;
 exports.numberAxisLabelFormatter = numberAxisLabelFormatter;
 exports.dateAxisLabelFormatter = dateAxisLabelFormatter;
 exports.dateValueFormatter = dateValueFormatter;
-exports._interopRequireWildcard = _interopRequireWildcard;
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 var _dygraphTickers = require('./dygraph-tickers');
 
 var DygraphTickers = _interopRequireWildcard(_dygraphTickers);
+
+var _momentTimezone = require('moment-timezone');
+
+var moment = _interopRequireWildcard(_momentTimezone);
 
 var LOG_SCALE = 10;
 exports.LOG_SCALE = LOG_SCALE;
@@ -1404,6 +1408,17 @@ var SHORT_MONTH_NAMES_ = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'
 
 function dateAxisLabelFormatter(date, granularity, opts) {
   var utc = opts('labelsUTC');
+  var timezone = opts('labelsWithTimeZone');
+
+  console.log(timezone);
+
+  var accessors = DateAccessorsLocal;
+
+  if (utc) {
+    accessors = DateAccessorsUTC;
+  } else if (timezone != null) {
+    accessors = DateAccessorsWithTimezone(timezone);
+  }
   var accessors = utc ? DateAccessorsUTC : DateAccessorsLocal;
 
   var year = accessors.getFullYear(date),
@@ -1446,3 +1461,51 @@ function dateValueFormatter(d, opts) {
 }
 
 ;
+
+function getMomentTZ(d, interpret, timezone) {
+  if (interpret) {
+    return moment.tz(d, timezone); // if d is a javascript Date object, the resulting moment may have a *different* epoch than the input Date d.
+  } else {
+      return moment(d).tz(timezone); // does not change epoch value, just outputs same epoch value as different timezone
+    }
+}
+
+function DateAccessorsWithTimezone(timezone) {
+  return {
+    getFullYear: function getFullYear(d) {
+      return getMomentTZ(d, false, timezone).year();
+    },
+    getMonth: function getMonth(d) {
+      return getMomentTZ(d, false, timezone).month();
+    },
+    getDate: function getDate(d) {
+      return getMomentTZ(d, false, timezone).date();
+    },
+    getHours: function getHours(d) {
+      return getMomentTZ(d, false, timezone).hour();
+    },
+    getMinutes: function getMinutes(d) {
+      return getMomentTZ(d, false, timezone).minute();
+    },
+    getSeconds: function getSeconds(d) {
+      return getMomentTZ(d, false, timezone).second();
+    },
+    getMilliseconds: function getMilliseconds(d) {
+      return getMomentTZ(d, false, timezone).millisecond();
+    },
+    getDay: function getDay(d) {
+      return getMomentTZ(d, false, timezone).day();
+    },
+    makeDate: function makeDate(y, m, d, hh, mm, ss, ms) {
+      return getMomentTZ({
+        year: y,
+        month: m,
+        day: d,
+        hour: hh,
+        minute: mm,
+        second: ss,
+        millisecond: ms
+      }, true).toDate();
+    }
+  };
+}

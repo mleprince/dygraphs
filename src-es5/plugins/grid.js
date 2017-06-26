@@ -120,18 +120,14 @@ grid.prototype.willDrawChart = function (e) {
       if (ctx.setLineDash) ctx.setLineDash([]);
     }
     ctx.restore();
-
     if (g.getOptionForAxis('detailedGrid', 'x')) {
 
       ctx.strokeStyle = 'rgb(200,200,200)';
 
-
       // affichage de la grille detaillé
       if (ticks.length > 1) {
 
-        var delta = (ticks[1].pos - ticks[0].pos) / 5
-
-
+        var delta = (ticks[1].pos - ticks[0].pos) / 5;
 
         /**
          * Affichage des barres horizontales
@@ -139,19 +135,18 @@ grid.prototype.willDrawChart = function (e) {
 
         ctx.beginPath();
 
-        var it = 0
+        var it = 0;
         var y;
         while (it < area.h) {
           y = halfDown(area.y + it);
           ctx.moveTo(halfUp(area.x), y);
           ctx.lineTo(halfUp(area.x + area.w), y);
-          it += delta * area.w
+          it += delta * area.w;
         }
 
         /**
          * Affichage des barres verticales
          */
-
 
         // 5 premiers
         for (i = 1; i < 5; i++) {
@@ -171,11 +166,10 @@ grid.prototype.willDrawChart = function (e) {
           }
         }
 
-
         ctx.closePath();
         ctx.stroke();
 
-        if ((delta * area.w / 5) > 4) {
+        if (delta * area.w / 5 > 4) {
           ctx.beginPath();
           ctx.setLineDash([2, 8]);
           // 5 premiers
@@ -198,12 +192,10 @@ grid.prototype.willDrawChart = function (e) {
           ctx.closePath();
           ctx.setLineDash([]);
         }
-
       }
     }
   }
 };
-
 grid.prototype.destroy = function () {};
 
 exports["default"] = grid;

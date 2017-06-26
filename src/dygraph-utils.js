@@ -16,6 +16,8 @@
 
 import * as DygraphTickers from './dygraph-tickers';
 
+import * as moment from 'moment-timezone'
+
 export var LOG_SCALE = 10;
 export var LN_TEN = Math.log(LOG_SCALE);
 
@@ -24,7 +26,7 @@ export var LN_TEN = Math.log(LOG_SCALE);
  * @param {number} x
  * @return {number}
  */
-export var log10 = function(x) {
+export var log10 = function (x) {
   return Math.log(x) / LN_TEN;
 };
 
@@ -35,7 +37,7 @@ export var log10 = function(x) {
  * @param {number} pct
  * @return {number}
  */
-export var logRangeFraction = function(r0, r1, pct) {
+export var logRangeFraction = function (r0, r1, pct) {
   // Computing the inverse of toPercentXCoord. The function was arrived at with
   // the following steps:
   //
@@ -83,7 +85,7 @@ export var VERTICAL = 2;
  * @return {!CanvasRenderingContext2D}
  * @private
  */
-export var getContext = function(canvas) {
+export var getContext = function (canvas) {
   return /** @type{!CanvasRenderingContext2D}*/(canvas.getContext("2d"));
 };
 
@@ -181,12 +183,12 @@ export function hsvToRGB(hue, saturation, value) {
  */
 export function findPos(obj) {
   var p = obj.getBoundingClientRect(),
-      w = window,
-      d = document.documentElement;
+    w = window,
+    d = document.documentElement;
 
   return {
     x: p.left + (w.pageXOffset || d.scrollLeft),
-    y: p.top  + (w.pageYOffset || d.scrollTop)
+    y: p.top + (w.pageYOffset || d.scrollTop)
   }
 };
 
@@ -303,7 +305,7 @@ export function floatFormat(x, opt_precision) {
   // Finally, the argument for toExponential() is the number of trailing digits,
   // so we take off 1 for the value before the '.'.
   return (Math.abs(x) < 1.0e-3 && x !== 0.0) ?
-      x.toExponential(p - 1) : x.toPrecision(p);
+    x.toExponential(p - 1) : x.toPrecision(p);
 };
 
 /**
@@ -322,15 +324,15 @@ export function zeropad(x) {
  * and factory method to call the Date constructor with an array of arguments.
  */
 export var DateAccessorsLocal = {
-  getFullYear:     d => d.getFullYear(),
-  getMonth:        d => d.getMonth(),
-  getDate:         d => d.getDate(),
-  getHours:        d => d.getHours(),
-  getMinutes:      d => d.getMinutes(),
-  getSeconds:      d => d.getSeconds(),
+  getFullYear: d => d.getFullYear(),
+  getMonth: d => d.getMonth(),
+  getDate: d => d.getDate(),
+  getHours: d => d.getHours(),
+  getMinutes: d => d.getMinutes(),
+  getSeconds: d => d.getSeconds(),
   getMilliseconds: d => d.getMilliseconds(),
-  getDay:          d => d.getDay(),
-  makeDate:        function(y, m, d, hh, mm, ss, ms) {
+  getDay: d => d.getDay(),
+  makeDate: function (y, m, d, hh, mm, ss, ms) {
     return new Date(y, m, d, hh, mm, ss, ms);
   }
 };
@@ -341,15 +343,15 @@ export var DateAccessorsLocal = {
  * and factory method to call the Date constructor with an array of arguments.
  */
 export var DateAccessorsUTC = {
-  getFullYear:     d => d.getUTCFullYear(),
-  getMonth:        d => d.getUTCMonth(),
-  getDate:         d => d.getUTCDate(),
-  getHours:        d => d.getUTCHours(),
-  getMinutes:      d => d.getUTCMinutes(),
-  getSeconds:      d => d.getUTCSeconds(),
+  getFullYear: d => d.getUTCFullYear(),
+  getMonth: d => d.getUTCMonth(),
+  getDate: d => d.getUTCDate(),
+  getHours: d => d.getUTCHours(),
+  getMinutes: d => d.getUTCMinutes(),
+  getSeconds: d => d.getUTCSeconds(),
   getMilliseconds: d => d.getUTCMilliseconds(),
-  getDay:          d => d.getUTCDay(),
-  makeDate:        function(y, m, d, hh, mm, ss, ms) {
+  getDay: d => d.getUTCDay(),
+  makeDate: function (y, m, d, hh, mm, ss, ms) {
     return new Date(Date.UTC(y, m, d, hh, mm, ss, ms));
   }
 };
@@ -368,7 +370,7 @@ export function hmsString_(hh, mm, ss, ms) {
     ret += ":" + zeropad(ss);
     if (ms) {
       var str = "" + ms;
-      ret += "." + ('000'+str).substring(str.length);
+      ret += "." + ('000' + str).substring(str.length);
     }
   }
   return ret;
@@ -415,7 +417,7 @@ export function dateString_(time, utc) {
  */
 export function round_(num, places) {
   var shift = Math.pow(10, places);
-  return Math.round(num * shift)/shift;
+  return Math.round(num * shift) / shift;
 };
 
 /**
@@ -433,7 +435,7 @@ export function round_(num, places) {
  */
 export function binarySearch(val, arry, abs, low, high) {
   if (low === null || low === undefined ||
-      high === null || high === undefined) {
+    high === null || high === undefined) {
     low = 0;
     high = arry.length - 1;
   }
@@ -443,7 +445,7 @@ export function binarySearch(val, arry, abs, low, high) {
   if (abs === null || abs === undefined) {
     abs = 0;
   }
-  var validIndex = function(idx) {
+  var validIndex = function (idx) {
     return idx >= 0 && idx < arry.length;
   };
   var mid = parseInt((low + high) / 2, 10);
@@ -493,7 +495,7 @@ export function dateParser(dateStr) {
   // then you probably know what you're doing, so we'll let you go ahead.
   // Issue: http://code.google.com/p/dygraphs/issues/detail?id=255
   if (dateStr.search("-") == -1 ||
-      dateStr.search("T") != -1 || dateStr.search("Z") != -1) {
+    dateStr.search("T") != -1 || dateStr.search("Z") != -1) {
     d = dateStrToMillis(dateStr);
     if (d && !isNaN(d)) return d;
   }
@@ -506,8 +508,8 @@ export function dateParser(dateStr) {
     d = dateStrToMillis(dateStrSlashed);
   } else if (dateStr.length == 8) {  // e.g. '20090712'
     // TODO(danvk): remove support for this format. It's confusing.
-    dateStrSlashed = dateStr.substr(0,4) + "/" + dateStr.substr(4,2) + "/" +
-        dateStr.substr(6,2);
+    dateStrSlashed = dateStr.substr(0, 4) + "/" + dateStr.substr(4, 2) + "/" +
+      dateStr.substr(6, 2);
     d = dateStrToMillis(dateStrSlashed);
   } else {
     // Any format that Date.parse will accept, e.g. "2009/07/12" or
@@ -542,7 +544,7 @@ export function dateStrToMillis(str) {
  * @return {!Object}
  */
 export function update(self, o) {
-  if (typeof(o) != 'undefined' && o !== null) {
+  if (typeof (o) != 'undefined' && o !== null) {
     for (var k in o) {
       if (o.hasOwnProperty(k)) {
         self[k] = o[k];
@@ -565,11 +567,11 @@ export function updateDeep(self, o) {
   function isNode(o) {
     return (
       typeof Node === "object" ? o instanceof Node :
-      typeof o === "object" && typeof o.nodeType === "number" && typeof o.nodeName==="string"
+        typeof o === "object" && typeof o.nodeType === "number" && typeof o.nodeName === "string"
     );
   }
 
-  if (typeof(o) != 'undefined' && o !== null) {
+  if (typeof (o) != 'undefined' && o !== null) {
     for (var k in o) {
       if (o.hasOwnProperty(k)) {
         if (o[k] === null) {
@@ -579,8 +581,8 @@ export function updateDeep(self, o) {
         } else if (isNode(o[k])) {
           // DOM objects are shallowly-copied.
           self[k] = o[k];
-        } else if (typeof(o[k]) == 'object') {
-          if (typeof(self[k]) != 'object' || self[k] === null) {
+        } else if (typeof (o[k]) == 'object') {
+          if (typeof (self[k]) != 'object' || self[k] === null) {
             self[k] = {};
           }
           updateDeep(self[k], o[k]);
@@ -599,14 +601,14 @@ export function updateDeep(self, o) {
  * @private
  */
 export function isArrayLike(o) {
-  var typ = typeof(o);
+  var typ = typeof (o);
   if (
-      (typ != 'object' && !(typ == 'function' &&
-        typeof(o.item) == 'function')) ||
-      o === null ||
-      typeof(o.length) != 'number' ||
-      o.nodeType === 3
-     ) {
+    (typ != 'object' && !(typ == 'function' &&
+      typeof (o.item) == 'function')) ||
+    o === null ||
+    typeof (o.length) != 'number' ||
+    o.nodeType === 3
+  ) {
     return false;
   }
   return true;
@@ -618,8 +620,8 @@ export function isArrayLike(o) {
  * @private
  */
 export function isDateLike(o) {
-  if (typeof(o) != "object" || o === null ||
-      typeof(o.getTime) != 'function') {
+  if (typeof (o) != "object" || o === null ||
+    typeof (o.getTime) != 'function') {
     return false;
   }
   return true;
@@ -668,10 +670,10 @@ export function getContextPixelRatio(context) {
   try {
     var devicePixelRatio = window.devicePixelRatio;
     var backingStoreRatio = context.webkitBackingStorePixelRatio ||
-                            context.mozBackingStorePixelRatio ||
-                            context.msBackingStorePixelRatio ||
-                            context.oBackingStorePixelRatio ||
-                            context.backingStorePixelRatio || 1;
+      context.mozBackingStorePixelRatio ||
+      context.msBackingStorePixelRatio ||
+      context.oBackingStorePixelRatio ||
+      context.backingStorePixelRatio || 1;
     if (devicePixelRatio !== undefined) {
       return devicePixelRatio / backingStoreRatio;
     } else {
@@ -709,7 +711,7 @@ export function Iterator(array, start, length, predicate) {
 /**
  * @return {Object}
  */
-Iterator.prototype.next = function() {
+Iterator.prototype.next = function () {
   if (!this.hasNext) {
     return null;
   }
@@ -756,15 +758,15 @@ export function createIterator(array, start, length, opt_predicate) {
 // From: http://paulirish.com/2011/requestanimationframe-for-smart-animating/
 // Should be called with the window context:
 //   Dygraph.requestAnimFrame.call(window, function() {})
-export var requestAnimFrame = (function() {
-  return window.requestAnimationFrame       ||
-          window.webkitRequestAnimationFrame ||
-          window.mozRequestAnimationFrame    ||
-          window.oRequestAnimationFrame      ||
-          window.msRequestAnimationFrame     ||
-          function (callback) {
-            window.setTimeout(callback, 1000 / 60);
-          };
+export var requestAnimFrame = (function () {
+  return window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function (callback) {
+      window.setTimeout(callback, 1000 / 60);
+    };
 })();
 
 /**
@@ -781,7 +783,7 @@ export var requestAnimFrame = (function() {
  * @private
  */
 export function repeatAndCleanup(repeatFn, maxFrames, framePeriodInMillis,
-    cleanupFn) {
+  cleanupFn) {
   var frameNumber = 0;
   var previousFrameNumber;
   var startTime = new Date().getTime();
@@ -794,7 +796,7 @@ export function repeatAndCleanup(repeatFn, maxFrames, framePeriodInMillis,
 
   (function loop() {
     if (frameNumber >= maxFrames) return;
-    requestAnimFrame.call(window, function() {
+    requestAnimFrame.call(window, function () {
       // Determine which frame to draw based on the delay so far.  Will skip
       // frames if necessary.
       var currentTime = new Date().getTime();
@@ -884,7 +886,7 @@ export function isPixelChangingOptionList(labels, attrs) {
 
   // Create a dictionary of series names for faster lookup.
   // If there are no labels, then the dictionary stays empty.
-  var seriesNamesDictionary = { };
+  var seriesNamesDictionary = {};
   if (labels) {
     for (var i = 1; i < labels.length; i++) {
       seriesNamesDictionary[labels[i]] = true;
@@ -893,10 +895,10 @@ export function isPixelChangingOptionList(labels, attrs) {
 
   // Scan through a flat (i.e. non-nested) object of options.
   // Returns true/false depending on whether new points are needed.
-  var scanFlatOptions = function(options) {
+  var scanFlatOptions = function (options) {
     for (var property in options) {
       if (options.hasOwnProperty(property) &&
-          !pixelSafeOptions[property]) {
+        !pixelSafeOptions[property]) {
         return true;
       }
     }
@@ -909,7 +911,7 @@ export function isPixelChangingOptionList(labels, attrs) {
 
     // Find out of this field is actually a series specific options list.
     if (property == 'highlightSeriesOpts' ||
-        (seriesNamesDictionary[property] && !attrs.series)) {
+      (seriesNamesDictionary[property] && !attrs.series)) {
       // This property value is a list of options for this series.
       if (scanFlatOptions(attrs[property])) return true;
     } else if (property == 'series' || property == 'axes') {
@@ -917,7 +919,7 @@ export function isPixelChangingOptionList(labels, attrs) {
       var perSeries = attrs[property];
       for (var series in perSeries) {
         if (perSeries.hasOwnProperty(series) &&
-            scanFlatOptions(perSeries[series])) {
+          scanFlatOptions(perSeries[series])) {
           return true;
         }
       }
@@ -932,7 +934,7 @@ export function isPixelChangingOptionList(labels, attrs) {
 };
 
 export var Circles = {
-  DEFAULT : function(g, name, ctx, canvasx, canvasy, color, radius) {
+  DEFAULT: function (g, name, ctx, canvasx, canvasy, color, radius) {
     ctx.beginPath();
     ctx.fillStyle = color;
     ctx.arc(canvasx, canvasy, radius, 0, 2 * Math.PI, false);
@@ -1008,12 +1010,12 @@ function parseRGBA(rgbStr) {
   var bits = RGBA_RE.exec(rgbStr);
   if (!bits) return null;
   var r = parseInt(bits[1], 10),
-      g = parseInt(bits[2], 10),
-      b = parseInt(bits[3], 10);
+    g = parseInt(bits[2], 10),
+    b = parseInt(bits[3], 10);
   if (bits[4]) {
-    return {r: r, g: g, b: b, a: parseFloat(bits[4])};
+    return { r: r, g: g, b: b, a: parseFloat(bits[4]) };
   } else {
-    return {r: r, g: g, b: b};
+    return { r: r, g: g, b: b };
   }
 }
 
@@ -1080,7 +1082,7 @@ export function parseFloat_(x, opt_line_no, opt_line) {
   // Looks like a parsing error.
   var msg = "Unable to parse '" + x + "' as a number";
   if (opt_line !== undefined && opt_line_no !== undefined) {
-    msg += " on line " + (1+(opt_line_no||0)) + " ('" + opt_line + "') of CSV.";
+    msg += " on line " + (1 + (opt_line_no || 0)) + " ('" + opt_line + "') of CSV.";
   }
   console.error(msg);
 
@@ -1090,9 +1092,9 @@ export function parseFloat_(x, opt_line_no, opt_line) {
 
 // Label constants for the labelsKMB and labelsKMG2 options.
 // (i.e. '100000' -> '100K')
-var KMB_LABELS = [ 'K', 'M', 'B', 'T', 'Q' ];
-var KMG2_BIG_LABELS = [ 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' ];
-var KMG2_SMALL_LABELS = [ 'm', 'u', 'n', 'p', 'f', 'a', 'z', 'y' ];
+var KMB_LABELS = ['K', 'M', 'B', 'T', 'Q'];
+var KMG2_BIG_LABELS = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
+var KMG2_SMALL_LABELS = ['m', 'u', 'n', 'p', 'f', 'a', 'z', 'y'];
 
 /**
  * @private
@@ -1119,8 +1121,8 @@ export function numberValueFormatter(x, opts) {
 
   // switch to scientific notation if we underflow or overflow fixed display.
   if (x !== 0.0 &&
-      (Math.abs(x) >= Math.pow(10, maxNumberWidth) ||
-       Math.abs(x) < Math.pow(10, -digits))) {
+    (Math.abs(x) >= Math.pow(10, maxNumberWidth) ||
+      Math.abs(x) < Math.pow(10, -digits))) {
     label = x.toExponential(digits);
   } else {
     label = '' + round_(x, digits);
@@ -1143,7 +1145,7 @@ export function numberValueFormatter(x, opts) {
 
     var absx = Math.abs(x);
     var n = pow(k, k_labels.length);
-    for (var j = k_labels.length - 1; j >= 0; j--, n /= k) {
+    for (var j = k_labels.length - 1; j >= 0; j-- , n /= k) {
       if (absx >= n) {
         label = round_(x / n, digits) + k_labels[j];
         break;
@@ -1155,8 +1157,8 @@ export function numberValueFormatter(x, opts) {
       if (x_parts.length === 2 && x_parts[1] >= 3 && x_parts[1] <= 24) {
         if (x_parts[1] % 3 > 0) {
           label = round_(x_parts[0] /
-              pow(10, (x_parts[1] % 3)),
-              digits);
+            pow(10, (x_parts[1] % 3)),
+            digits);
         } else {
           label = Number(x_parts[0]).toFixed(2);
         }
@@ -1196,15 +1198,27 @@ var SHORT_MONTH_NAMES_ = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'
  */
 export function dateAxisLabelFormatter(date, granularity, opts) {
   var utc = opts('labelsUTC');
+  var timezone = opts('labelsWithTimeZone');
+
+  console.log(timezone)
+
+  var accessors = DateAccessorsLocal;
+
+  if (utc) {
+    accessors = DateAccessorsUTC
+  }
+  else if (timezone != null) {
+    accessors = DateAccessorsWithTimezone(timezone);
+  }
   var accessors = utc ? DateAccessorsUTC : DateAccessorsLocal;
 
   var year = accessors.getFullYear(date),
-      month = accessors.getMonth(date),
-      day = accessors.getDate(date),
-      hours = accessors.getHours(date),
-      mins = accessors.getMinutes(date),
-      secs = accessors.getSeconds(date),
-      millis = accessors.getMilliseconds(date);
+    month = accessors.getMonth(date),
+    day = accessors.getDate(date),
+    hours = accessors.getHours(date),
+    mins = accessors.getMinutes(date),
+    secs = accessors.getSeconds(date),
+    millis = accessors.getMilliseconds(date);
 
   if (granularity >= DygraphTickers.Granularity.DECADAL) {
     return '' + year;
@@ -1233,3 +1247,38 @@ export function dateAxisLabelFormatter(date, granularity, opts) {
 export function dateValueFormatter(d, opts) {
   return dateString_(d, opts('labelsUTC'));
 };
+
+function getMomentTZ(d, interpret, timezone) {
+  if (interpret) {
+    return moment.tz(d, timezone); // if d is a javascript Date object, the resulting moment may have a *different* epoch than the input Date d.
+  } else {
+    return moment(d).tz(timezone); // does not change epoch value, just outputs same epoch value as different timezone
+  }
+}
+
+function DateAccessorsWithTimezone(timezone) {
+  return {
+    getFullYear: function (d) { return getMomentTZ(d, false,timezone).year(); },
+    getMonth: function (d) { return getMomentTZ(d, false,timezone).month(); },
+    getDate: function (d) { return getMomentTZ(d, false,timezone).date(); },
+    getHours: function (d) { return getMomentTZ(d, false,timezone).hour(); },
+    getMinutes: function (d) { return getMomentTZ(d, false,timezone).minute(); },
+    getSeconds: function (d) { return getMomentTZ(d, false,timezone).second(); },
+    getMilliseconds: function (d) { return getMomentTZ(d, false,timezone).millisecond(); },
+    getDay: function (d) { return getMomentTZ(d, false,timezone).day(); },
+    makeDate: function (y, m, d, hh, mm, ss, ms) {
+      return getMomentTZ({
+        year: y,
+        month: m,
+        day: d,
+        hour: hh,
+        minute: mm,
+        second: ss,
+        millisecond: ms,
+      }, true).toDate();
+    }
+  }
+}
+
+
+
