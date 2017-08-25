@@ -574,7 +574,7 @@ if (typeof process !== 'undefined') {
       },
       "detailedGrid": {
         "default": "true for x",
-        "labels": ["Detailled Grid"],
+        "labels": ["Detailed Grid"],
         "type": "boolean",
         "description": "Whether to display gridlines in the chart. This may be set on a per-axis basis to define the visibility of each axis' grid separately."
       },

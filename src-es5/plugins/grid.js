@@ -97,7 +97,10 @@ grid.prototype.willDrawChart = function (e) {
 
   // draw grid for x axis
   if (g.getOptionForAxis('drawGrid', 'x')) {
+    // a tick is the position of a vertical grid line (as an offset ratio of area width)
     ticks = layout.xticks;
+
+    // grid line settings
     ctx.save();
     var strokePattern = g.getOptionForAxis('gridLinePattern', 'x');
     var stroking = strokePattern && strokePattern.length >= 2;
@@ -106,6 +109,8 @@ grid.prototype.willDrawChart = function (e) {
     }
     ctx.strokeStyle = g.getOptionForAxis('gridLineColor', 'x');
     ctx.lineWidth = g.getOptionForAxis('gridLineWidth', 'x');
+
+    // draw a tick per second
     ticks.forEach(function (tick) {
       if (!tick.has_tick) return;
       x = halfUp(area.x + tick.pos * area.w);
@@ -120,79 +125,70 @@ grid.prototype.willDrawChart = function (e) {
       if (ctx.setLineDash) ctx.setLineDash([]);
     }
     ctx.restore();
+
+    // -------- HERE is an adding of BIOSERENITY ---------
+    // draw more detailed grid
     if (g.getOptionForAxis('detailedGrid', 'x')) {
 
       ctx.strokeStyle = 'rgb(200,200,200)';
 
-      // affichage de la grille detaillé
-      if (ticks.length > 1) {
+      var SUBDIV_COUNT = 5;
+      if(ticks.length===0) {
+        ticks = [{pos:0}];
+      }
+      var deltaRatio = ticks.length > 1 ? (ticks[1].pos - ticks[0].pos) : 1;
 
-        var delta = (ticks[1].pos - ticks[0].pos) / 5;
+      var drawVerticalLine = function( offsetRatio ) {
+        var x = halfUp(area.x + offsetRatio * area.w);
+        var y = halfDown(area.y + area.h);
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, area.y);
+      }
 
-        /**
-         * Affichage des barres horizontales
-         */
-
-        ctx.beginPath();
-
-        var it = 0;
-        var y;
-        while (it < area.h) {
-          y = halfDown(area.y + it);
-          ctx.moveTo(halfUp(area.x), y);
-          ctx.lineTo(halfUp(area.x + area.w), y);
-          it += delta * area.w;
-        }
-
-        /**
-         * Affichage des barres verticales
-         */
-
-        // 5 premiers
-        for (i = 1; i < 5; i++) {
-          x = halfUp(area.x + (ticks[0].pos - i * delta) * area.w);
-          y = halfDown(area.y + area.h);
-
-          ctx.moveTo(x, y);
-          ctx.lineTo(x, area.y);
-        }
-        // tous les suivants
-        for (i = 1; i < 5 * ticks.length; i++) {
-          if (i % 5 != 0) {
-            y = halfDown(area.y + area.h);
-            x = halfUp(area.x + (ticks[0].pos + i * delta) * area.w);
-            ctx.moveTo(x, y);
-            ctx.lineTo(x, area.y);
-          }
-        }
-
-        ctx.closePath();
-        ctx.stroke();
-
-        if (delta * area.w / 5 > 4) {
+      var drawVerticalLines = function( recursionLevel ) {
+        var TOTAL_SUBDIV_COUNT = Math.pow(SUBDIV_COUNT, recursionLevel);
+        if (deltaRatio / TOTAL_SUBDIV_COUNT * area.w > 4 /* pixels */) {
           ctx.beginPath();
-          ctx.setLineDash([2, 8]);
-          // 5 premiers
-          for (i = 1; i < 25; i++) {
-            x = halfUp(area.x + (ticks[0].pos - i * (delta / 5)) * area.w);
-            y = halfDown(area.y + area.h);
-            ctx.moveTo(x, y);
-            ctx.lineTo(x, area.y);
+          var offsetRatio = deltaRatio / TOTAL_SUBDIV_COUNT;
+          // lines before first tick
+          for (i = 1; i < TOTAL_SUBDIV_COUNT; i++) {
+            drawVerticalLine( ticks[0].pos - i * offsetRatio );
           }
-          // tous les suivants
-          for (i = 1; i < 5 * ticks.length * 25; i++) {
-            if (i % 5 != 0) {
-              y = halfDown(area.y + area.h);
-              x = halfUp(area.x + (ticks[0].pos + i * (delta / 5)) * area.w);
-              ctx.moveTo(x, y);
-              ctx.lineTo(x, area.y);
+          // next lines
+          for (i = 1; i < TOTAL_SUBDIV_COUNT * ticks.length; i++) {
+            if (i % SUBDIV_COUNT != 0) { // skip position of higher level ticks
+              drawVerticalLine( ticks[0].pos + i * offsetRatio );
             }
           }
-          ctx.stroke();
           ctx.closePath();
-          ctx.setLineDash([]);
         }
       }
+
+      /**
+       * Vertical lines
+       */
+      drawVerticalLines(1);
+      ctx.stroke();
+
+      ctx.setLineDash([2, 8]);
+      drawVerticalLines(2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      /**
+       * Horizontal lines
+       */
+      ctx.beginPath();
+      var it = 0;
+      var y;
+      while (it < area.h) {
+        y = halfDown(area.y + it);
+        ctx.moveTo(halfUp(area.x), y);
+        ctx.lineTo(halfUp(area.x + area.w), y);
+        it += deltaRatio / SUBDIV_COUNT * area.w;
+      }
+      ctx.closePath();
+      ctx.stroke();
     }
   }
 };
