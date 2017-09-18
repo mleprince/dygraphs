@@ -222,9 +222,6 @@ grid.prototype.willDrawChart = function (e) {
   var layout = g.layout_;
   var area = e.dygraph.plotter_.area;
 
-  console.log(area)
-
-
   var ticks = layout.xticks; // a tick is the position of a vertical grid line (as an offset ratio of area width)
 
   if (g.getOptionForAxis('drawGrid', 'y')) {
