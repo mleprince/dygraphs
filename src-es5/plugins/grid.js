@@ -131,9 +131,9 @@ grid.prototype.drawDetailedGrid = function (g, ctx, layout, area, ticks) {
   var deltaRatio = ticks.length > 1 ? (ticks[1].pos - ticks[0].pos) : 1; // delta between two ticks in % of the window 
 
 
-  var drawVerticalLine = function(x) {
-    ctx.moveTo(x,area.y);
-    ctx.lineTo(x,area.y+area.h)
+  var drawVerticalLine = function (x) {
+    ctx.moveTo(x, area.y);
+    ctx.lineTo(x, area.y + area.h)
   }
 
   var drawHorizontalLine = function (y) {
@@ -150,18 +150,17 @@ grid.prototype.drawDetailedGrid = function (g, ctx, layout, area, ticks) {
 
     var posFirstTick = ticks[0].pos * area.w;
 
-    for(var x = posFirstTick - delta; x > area.x; x -= delta) {
+    for (var x = posFirstTick - delta; x > area.x; x -= delta) {
       drawVerticalLine(halfUp(x));
     }
 
     /**
      * Lines after first tick
-     */
-    for(var x = posFirstTick + delta, finalX = area.x+area.w; x < finalX; x += delta) {
-      if( (x - posFirstTick) % delta)
+    */
+    for (var x = posFirstTick + delta, finalX = area.x + area.w; x < finalX; x += delta) {
       drawVerticalLine(halfUp(x));
     }
-    
+
     ctx.closePath();
     ctx.stroke();
   }
@@ -244,7 +243,7 @@ exports["default"] = grid;
 module.exports = exports["default"];
 
 
-grid.prototype.destroy = function () {};
+grid.prototype.destroy = function () { };
 
 exports["default"] = grid;
 module.exports = exports["default"];
