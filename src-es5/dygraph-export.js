@@ -122,7 +122,7 @@ exporter.asCanvas = function (dygraph, userOptions) {
     //   canvas.height = dygraph.height_ + options.legendHeight;
     canvas.height = dygraph.height_;
     this.drawPlot(canvas, dygraph, options);
-    //  this.drawLegend(canvas, dygraph, options);
+    // this.drawLegend(canvas, dygraph, options);
 
     return canvas;
 };
@@ -165,7 +165,12 @@ exporter.drawPlot = function (canvas, dygraph, options) {
     if (labelsPluginDict) {
         var labelsPlugin = labelsPluginDict.plugin;
 
-        this.putLabel(ctx, labelsPlugin.title_div_, options, options.titleFont, options.titleFontColor);
+        var title = labelsPlugin.title_div_
+
+        title.style.textAlign = "center";
+        title.style.top = "5px";
+
+        this.putLabel(ctx, title, options, options.titleFont, options.titleFontColor)
 
         this.putLabel(ctx, labelsPlugin.xlabel_div_, options, options.axisLabelFont, options.axisLabelFontColor);
 
@@ -179,11 +184,12 @@ exporter.drawPlot = function (canvas, dygraph, options) {
     }
 };
 
+
 /**
  * Draws a label (axis label or graph title) at the same position 
  * where the div containing the text is located.
  */
-exporter.putLabel = function (ctx, divLabel, options, font, color) {
+exporter.putLabel = function (ctx, divLabel, options, font, color, align) {
     "use strict";
 
     if (!divLabel || !divLabel.style) {
@@ -206,6 +212,7 @@ exporter.putLabel = function (ctx, divLabel, options, font, color) {
     var width = parseInt(divLabel.style.width, 10);
 
     switch (divLabel.style.textAlign) {
+
         case "center":
             left = left + Math.ceil(width / 2);
             break;
