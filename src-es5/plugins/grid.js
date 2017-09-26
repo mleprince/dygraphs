@@ -99,6 +99,7 @@ grid.prototype.drawXGrid = function (g, ctx, layout, area, ticks) {
 
   // draw a tick per second
   ticks.forEach(function (tick) {
+
     if (!tick.has_tick) return;
     x = halfUp(area.x + tick.pos * area.w);
     y = halfDown(area.y + area.h);
@@ -120,16 +121,13 @@ grid.prototype.drawDetailedGrid = function (g, ctx, layout, area, ticks) {
   // -------- HERE is an adding of BIOSERENITY ---------
   // draw more detailed grid
 
-  ctx.save();
+  var x, y;
 
-  ctx.strokeStyle = 'rgb(200,200,200)';
-
-  var SUBDIV_COUNT = 5;
   if (ticks.length === 0) {
     ticks = [{ pos: 0 }];
   }
-  var deltaRatio = ticks.length > 1 ? (ticks[1].pos - ticks[0].pos) : 1; // delta between two ticks in % of the window 
 
+  var deltaRatio = ticks.length > 1 ? (ticks[1].pos - ticks[0].pos) : 1; // delta between two ticks in % of the window 
 
   var drawVerticalLine = function (x) {
     ctx.moveTo(x, area.y);
@@ -148,11 +146,12 @@ grid.prototype.drawDetailedGrid = function (g, ctx, layout, area, ticks) {
      * lines before first tick 
      */
 
-    var posFirstTick = ticks[0].pos * area.w;
+    var posFirstTick = area.x + ticks[0].pos * area.w;
 
     for (var x = posFirstTick - delta; x > area.x; x -= delta) {
       drawVerticalLine(halfUp(x));
     }
+
 
     /**
      * Lines after first tick
@@ -169,7 +168,7 @@ grid.prototype.drawDetailedGrid = function (g, ctx, layout, area, ticks) {
 
     ctx.beginPath();
 
-    for (var y = area.y; y < area.h; y += delta) {
+    for (var y = area.y, finalY = area.y + area.h; y < finalY; y += delta) {
       drawHorizontalLine(halfDown(y))
     }
 
@@ -184,25 +183,28 @@ grid.prototype.drawDetailedGrid = function (g, ctx, layout, area, ticks) {
   var delta25 = (deltaRatio / 25) * area.w
 
   if (delta25 > 4 /* pixels */) {
-    ctx.strokeStyle = 'rgb(230,230,230)';
+    ctx.save();
+    ctx.strokeStyle = 'rgb(200,200,200)';
     // vertical
     drawVerticalLines(delta25);
 
     //horizontal
     drawHorizontalLines(delta25);
+    ctx.restore();
   }
 
   var delta5 = (deltaRatio / 5) * area.w
 
   if (delta5 > 4 /* pixels */) {
-    ctx.strokeStyle = 'rgb(200,200,200)';
+    ctx.save();
+    ctx.strokeStyle = 'rgb(160,160,160)';
     // vertical
     drawVerticalLines(delta5);
     // horizontal
     drawHorizontalLines(delta5);
-  }
 
-  ctx.restore()
+    ctx.restore();
+  }
 }
 
 function halfUp(x) {
@@ -229,12 +231,14 @@ grid.prototype.willDrawChart = function (e) {
 
   // draw grid for x axis
   if (g.getOptionForAxis('drawGrid', 'x')) {
-
+    this.drawXGrid(g, ctx, layout, area, ticks)
     if (g.getOptionForAxis('detailedGrid', 'x')) {
       this.drawDetailedGrid(g, ctx, layout, area, ticks);
     }
-    this.drawXGrid(g, ctx, layout, area, ticks)
+
   }
+
+
 };
 
 grid.prototype.destroy = function () { };
